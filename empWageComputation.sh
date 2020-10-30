@@ -2,7 +2,8 @@
 FULL_TIME=8
 PART_TIME=4
 wage_per_hour=20
-dailyWage=0
+MAX_DAYS=20
+MAX_WOKING_HOURS=160
 getWorkDonePerDay(){
 
         case $((RANDOM%2)) in
@@ -12,16 +13,24 @@ getWorkDonePerDay(){
         esac
         echo $workDonePerDay;
 }
-workDonePerDay=$( getWorkDonePerDay $((RANDOM%2)) );
-getDailyWage(){
-	dailyWage=$((workDonePerDay*wage_per_hour))
-	echo "Employee's daily wage is - "$dailyWage
+getAttendance(){
+	case $((RANDOM%2)) in
+		0) day=1;;
+		1) day=0;;
+	esac
+	echo $day 
 }
-
-attendance=$((RANDOM%2))
-if [ $attendance -eq 0 ]
-then
-	echo "Employee is absent."
-else 
-	getDailyWage
-fi
+while [[ $count -lt $MAX_DAYS  ]]
+do
+	workDonePerDay=$( getWorkDonePerDay $((RANDOM%2)) );
+	attendance=$(getAttendance $((RANDOM%2)) );
+	tempHours=$((attendance*workDonePerDay));
+	totalHours=$((tempHours+totalHours))
+	tempWage=$((tempHours*wage_per_hour));
+	totalWage=$((totalWage+tempWage));
+	totalWorkingDays=$((totalWorkingDays+attendance));
+	((count++))
+done
+echo "Total Working Days = "$totalWorkingDays
+echo "total Hours = "$totalHours
+echo "Total monthly wage = "$totalWage
