@@ -4,6 +4,7 @@ PART_TIME=4
 wage_per_hour=20
 MAX_DAYS=20
 MAX_HOURS=100
+count=1
 getWorkDonePerDay(){
 
         case $((RANDOM%2)) in
@@ -20,17 +21,18 @@ getAttendance(){
 	esac
 	echo $day 
 }
-while [[ $count -lt $MAX_DAYS && $totalHours -lt $MAX_HOURS  ]]
-do
-	workDonePerDay=$( getWorkDonePerDay $((RANDOM%2)) );
-	attendance=$(getAttendance $((RANDOM%2)) );
-	tempHours=$((attendance*workDonePerDay));
-	totalHours=$((tempHours+totalHours))
-	tempWage=$((tempHours*wage_per_hour));
-	totalWage=$((totalWage+tempWage));
-	totalWorkingDays=$((totalWorkingDays+attendance));
-	((count++))
-done
-echo "Total Working Days = "$totalWorkingDays
-echo "total Hours = "$totalHours
+getTotalHour(){
+	while [[ $count -le $MAX_DAYS && $totalHours -le $MAX_HOURS  ]]
+	do
+		workDonePerDay=$( getWorkDonePerDay $((RANDOM%2)) );
+		attendance=$(getAttendance $((RANDOM%2)) );
+		tempHours=$((attendance*workDonePerDay));
+		totalHours=$((tempHours+totalHours))
+		((count++))
+	done
+	echo $totalHours
+}
+totalWorkingHours=$( getTotalHour )
+totalWage=$(( totalWorkingHours*wage_per_hour ));
+echo "total Hours = "$totalWorkingHours
 echo "Total monthly wage = "$totalWage
