@@ -1,6 +1,6 @@
 #!/bin/bash -x
 FULL_TIME=8
-PART_TIME=4
+PART_TIME=8
 wage_per_hour=20
 dailyWage=0
 getDailyWage(){
