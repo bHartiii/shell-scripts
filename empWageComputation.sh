@@ -1,9 +1,9 @@
-#!/bin/bash -x
+#!/bin/bash 
 FULL_TIME=8
 PART_TIME=4
 wage_per_hour=20
 MAX_DAYS=20
-MAX_WOKING_HOURS=160
+MAX_HOURS=100
 getWorkDonePerDay(){
 
         case $((RANDOM%2)) in
@@ -20,7 +20,7 @@ getAttendance(){
 	esac
 	echo $day 
 }
-while [[ $count -lt $MAX_DAYS  ]]
+while [[ $count -lt $MAX_DAYS && $totalHours -lt $MAX_HOURS  ]]
 do
 	workDonePerDay=$( getWorkDonePerDay $((RANDOM%2)) );
 	attendance=$(getAttendance $((RANDOM%2)) );
