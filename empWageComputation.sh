@@ -5,6 +5,7 @@ wage_per_hour=20
 MAX_DAYS=20
 MAX_HOURS=100
 count=1
+index=0
 getWorkDonePerDay(){
 
         case $((RANDOM%2)) in
@@ -43,9 +44,14 @@ getDailyWagesOrTotalHour(){
 
 totalHours_DailyWages=$( getDailyWagesOrTotalHour )
 totalWorkingHours=`echo $totalHours_DailyWages|awk -F / '{print $2}'`
-dailyWages[((index++))]=`echo $totalHours_DailyWages|awk -F / '{print $1}'`
+dailyWages=`echo $totalHours_DailyWages|awk -F / '{print $1}'`
 totalWage=$(( $totalWorkingHours*wage_per_hour ));
 
-echo "Daily Wages : "${dailyWages[@]}
+dailyWagesArray[((i++))]=`echo $dailyWages|awk '{print $"'$i'" }'`
+for varx in ${dailyWagesArray[@]}
+do
+	echo "day "$i "-" $varx
+	((i++))
+done
 echo "total Hours = "$totalWorkingHours
 echo "Total monthly wage = "$totalWage
