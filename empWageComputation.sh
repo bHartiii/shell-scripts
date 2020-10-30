@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash  
 FULL_TIME=8
 PART_TIME=4
 wage_per_hour=20
@@ -21,18 +21,31 @@ getAttendance(){
 	esac
 	echo $day 
 }
-getTotalHour(){
+getDailyHours(){
+	workDonePerDay=$( getWorkDonePerDay $((RANDOM%2)) );
+        attendance=$(getAttendance $((RANDOM%2)) );
+        tempHours=$((attendance*workDonePerDay));
+        ((count++))
+        echo $tempHours
+}
+
+getDailyWagesOrTotalHour(){
 	while [[ $count -le $MAX_DAYS && $totalHours -le $MAX_HOURS  ]]
 	do
-		workDonePerDay=$( getWorkDonePerDay $((RANDOM%2)) );
-		attendance=$(getAttendance $((RANDOM%2)) );
-		tempHours=$((attendance*workDonePerDay));
+		tempHours=$(getDailyHours);
+		tempWage=$((tempHours*wage_per_hour))
+		dailyWageArray[((index++))]=$tempWage
 		totalHours=$((tempHours+totalHours))
 		((count++))
 	done
-	echo $totalHours
+		echo ${dailyWageArray[@]}"/"$totalHours
 }
-totalWorkingHours=$( getTotalHour )
-totalWage=$(( totalWorkingHours*wage_per_hour ));
+
+totalHours_DailyWages=$( getDailyWagesOrTotalHour )
+totalWorkingHours=`echo $totalHours_DailyWages|awk -F / '{print $2}'`
+dailyWages[((index++))]=`echo $totalHours_DailyWages|awk -F / '{print $1}'`
+totalWage=$(( $totalWorkingHours*wage_per_hour ));
+
+echo "Daily Wages : "${dailyWages[@]}
 echo "total Hours = "$totalWorkingHours
 echo "Total monthly wage = "$totalWage
